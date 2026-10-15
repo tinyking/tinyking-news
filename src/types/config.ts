@@ -19,6 +19,8 @@ interface SiteConfig {
   dir?: "ltr" | "rtl" | "auto";
   /** Google Search Console verification meta tag value */
   googleVerification?: string;
+  /** Google AdSense publisher ID, e.g. "ca-pub-1234567890123456" */
+  adsenseClient?: string;
 }
 
 interface PostsConfig {
@@ -115,7 +117,7 @@ type ResolvedSiteConfig = Required<
     | "ogImage"
   >
 > &
-  Pick<SiteConfig, "profile" | "googleVerification">;
+  Pick<SiteConfig, "profile" | "googleVerification" | "adsenseClient">;
 
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;

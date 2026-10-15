@@ -95,6 +95,18 @@ const rssHref = getRelativeLocaleUrl(
       )
     }
 
+    <!-- Google AdSense -->
+    {
+      site.adsenseClient && (
+        <script
+          is:inline
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${site.adsenseClient}`}
+          crossorigin="anonymous"
+        />
+      )
+    }
+
     <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
