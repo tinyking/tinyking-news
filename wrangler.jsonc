@@ -1,0 +1,10 @@
+{
+  "name": "tinyking-news",
+  "compatibility_date": "2026-10-15", // 可以保持你原有的日期
+  "vars": {
+    "PNPM_VERSION": "10.5.0"
+  },
+  "assets": {
+    "directory": "./dist"
+  }
+}
