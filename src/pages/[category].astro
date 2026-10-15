@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Main from "@/components/Main.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Card from "@/components/Card.astro";
+import Footer from "@/components/Footer.astro";
+import { CATEGORIES } from "@/categories";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import config from "@/config";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  const sortedPosts = getSortedPosts(posts);
+
+  return CATEGORIES.flatMap(category => {
+    const categoryPosts = sortedPosts.filter(
+      ({ data }) => data.category === category.slug
+    );
+    // Only generate pages for categories that have at least one post,
+    // so empty categories never show up as unfinished pages.
+    return categoryPosts.length > 0
+      ? [
+          {
+            params: { category: category.slug },
+            props: { category, posts: categoryPosts },
+          },
+        ]
+      : [];
+  });
+}
+
+const { category, posts } = Astro.props;
+---
+
+<Layout
+  title={`${category.name} | ${config.site.title}`}
+  description={category.desc}
+>
+  <Header />
+
+  <Breadcrumb />
+
+  <Main pageTitle={category.name} pageDesc={category.desc}>
+    <ul>
+      {posts.map(data => <Card {...data} />)}
+    </ul>
+  </Main>
+
+  <Footer />
+</Layout>

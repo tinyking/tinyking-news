@@ -3,8 +3,9 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://news.wangjianchao.cn/",
-    title: "News",
-    description: "个人写作与转载的文章站",
+    title: "阅微漫记",
+    description:
+      "关于人生成长、AI 应用、职场经验与独立思考的原创随笔。于细微处读世事，在变化中保持清醒。",
     author: "wangjianchao",
     profile: "https://news.wangjianchao.cn/",
     lang: "zh",

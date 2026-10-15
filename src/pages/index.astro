@@ -11,6 +11,7 @@ import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
+import { CATEGORIES } from "@/categories";
 import config from "@/config";
 
 const { socials, posts: postsConfig } = config;
@@ -22,6 +23,9 @@ const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const categoryEntries = CATEGORIES.filter(category =>
+  sortedPosts.some(({ data }) => data.category === category.slug)
+);
 const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
@@ -35,7 +39,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
   >
     <section id="hero" class="border-border border-b pt-8 pb-6">
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Mingalaba
+        {config.site.title}
       </h1>
       <a
         target="_blank"
@@ -52,7 +56,10 @@ const homePath = getRelativeLocaleUrl(locale, "");
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>这里用来记录我的写作与转载的文章。</p>
+      <p class="mt-2 text-xl font-medium sm:text-2xl">于细微处读世事</p>
+      <p class="mt-3">
+        写人生成长，聊 AI 与工具，记职场经验，也想想那些没有标准答案的问题。
+      </p>
       {
         socials.length > 0 && (
           <div class="mt-4 flex max-sm:flex-col sm:items-center">
@@ -64,6 +71,36 @@ const homePath = getRelativeLocaleUrl(locale, "");
         )
       }
     </section>
+
+    {
+      categoryEntries.length > 0 && (
+        <section
+          id="categories"
+          class:list={[
+            "pt-12 pb-6",
+            {
+              "border-border border-b":
+                featuredPosts.length > 0 || recentPosts.length > 0,
+            },
+          ]}
+        >
+          <h2 class="text-2xl font-semibold tracking-wide">栏目</h2>
+          <ul class="mt-4 flex flex-wrap gap-3">
+            {categoryEntries.map(({ slug, name, desc }) => (
+              <li>
+                <a
+                  href={getRelativeLocaleUrl(locale, slug)}
+                  title={desc}
+                  class="border-border text-foreground hover:text-accent hover:border-accent rounded-md border px-3 py-1.5 transition-colors"
+                >
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     {
       featuredPosts.length > 0 && (

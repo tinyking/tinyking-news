@@ -7,21 +7,37 @@ import config from "@/config";
 
 export const GET: APIRoute = async context => {
   const fonts = fontData["--font-google-sans-code"];
+  const cjkFonts = fontData["--font-noto-sans-sc"];
   const regularFontPath = getFontPathByWeight(fonts, 400);
   const boldFontPath = getFontPathByWeight(fonts, 700);
+  // CJK-capable fallback so Chinese titles/descriptions render correctly
+  const cjkRegularFontPath = getFontPathByWeight(cjkFonts, 400);
+  const cjkBoldFontPath = getFontPathByWeight(cjkFonts, 700);
 
   if (regularFontPath === undefined || boldFontPath === undefined) {
     throw new Error("Cannot find the font path.");
   }
 
-  const [regularData, boldData] = await Promise.all([
-    fetch(experimental_getFontFileURL(regularFontPath, context.url)).then(res =>
-      res.arrayBuffer()
-    ),
-    fetch(experimental_getFontFileURL(boldFontPath, context.url)).then(res =>
-      res.arrayBuffer()
-    ),
-  ]);
+  const [regularData, boldData, cjkRegularData, cjkBoldData] = await Promise.all(
+    [
+      fetch(experimental_getFontFileURL(regularFontPath, context.url)).then(res =>
+        res.arrayBuffer()
+      ),
+      fetch(experimental_getFontFileURL(boldFontPath, context.url)).then(res =>
+        res.arrayBuffer()
+      ),
+      cjkRegularFontPath
+        ? fetch(experimental_getFontFileURL(cjkRegularFontPath, context.url)).then(
+            res => res.arrayBuffer()
+          )
+        : Promise.resolve(undefined),
+      cjkBoldFontPath
+        ? fetch(experimental_getFontFileURL(cjkBoldFontPath, context.url)).then(
+            res => res.arrayBuffer()
+          )
+        : Promise.resolve(undefined),
+    ]
+  );
 
   const svg = await satori(
     {
@@ -34,7 +50,7 @@ export const GET: APIRoute = async context => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "Google Sans Code",
+          fontFamily: "Google Sans Code, Noto Sans SC",
         },
         children: [
           {
@@ -156,6 +172,26 @@ export const GET: APIRoute = async context => {
           weight: 700,
           style: "normal",
         },
+        ...(cjkRegularData
+          ? [
+              {
+                name: "Noto Sans SC",
+                data: cjkRegularData,
+                weight: 400 as const,
+                style: "normal" as const,
+              },
+            ]
+          : []),
+        ...(cjkBoldData
+          ? [
+              {
+                name: "Noto Sans SC",
+                data: cjkBoldData,
+                weight: 700 as const,
+                style: "normal" as const,
+              },
+            ]
+          : []),
       ],
     }
   );
