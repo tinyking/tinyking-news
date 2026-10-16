@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://news.wangjianchao.cn/sitemap-index.xml
+Sitemap: https://www.wangjianchao.cn/sitemap-index.xml
