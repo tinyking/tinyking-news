@@ -15,6 +15,9 @@ import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import TableOfContents from "./_components/TableOfContents.astro";
+import RelatedPosts from "./_components/RelatedPosts.astro";
+import AdSlot from "@/components/AdSlot.astro";
 import { CATEGORIES } from "@/categories";
 import config from "@/config";
 
@@ -80,7 +83,7 @@ const postCategory = category
   ? CATEGORIES.find(c => c.slug === category)
   : undefined;
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 let ogImageUrl: string | undefined;
 
@@ -127,8 +130,18 @@ const ogImage = ogImageUrl
       {title}
     </h1>
 
-    <div class="my-2 flex items-center gap-2">
+    <div class="my-2 flex flex-wrap items-center gap-x-2 gap-y-2">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
+      {
+        postCategory && (
+          <a
+            href={getRelativeLocaleUrl(locale, postCategory.slug)}
+            class="border-border bg-muted hover:text-accent hover:border-accent rounded-md border px-2.5 py-1 text-sm transition-colors"
+          >
+            {postCategory.name}
+          </a>
+        )
+      }
       <span
         aria-hidden="true"
         class:list={[
@@ -141,6 +154,8 @@ const ogImage = ogImageUrl
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
 
+    <TableOfContents {headings} />
+
     <article
       id="article"
       class:list={[
@@ -152,6 +167,12 @@ const ogImage = ogImageUrl
       <Content />
     </article>
 
+    <AdSlot
+      slot={config.features.ads?.slots?.inArticle}
+      class="mt-8"
+      label="广告"
+    />
+
     <hr class="my-8 border-dashed" />
 
     <EditPost class="sm:hidden" {hideEditPost} {post} />
@@ -159,24 +180,14 @@ const ogImage = ogImageUrl
     <BackToTopButton />
 
     <ul class="mt-4 mb-8 flex flex-wrap items-center gap-4 sm:my-8">
-      {
-        postCategory && (
-          <li>
-            <a
-              href={getRelativeLocaleUrl(locale, postCategory.slug)}
-              class="border-border bg-muted hover:text-accent hover:border-accent rounded-md border px-2.5 py-1 text-sm transition-colors"
-            >
-              {postCategory.name}
-            </a>
-          </li>
-        )
-      }
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
     </ul>
 
     <ShareLinks />
 
     <hr class="my-8 border-dashed" />
+
+    <RelatedPosts current={post} />
 
     <AdjacentPostNav {prevPost} {nextPost} />
   </main>

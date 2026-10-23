@@ -107,20 +107,32 @@ const rssHref = getRelativeLocaleUrl(
       )
     }
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      is:inline
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-M6KN1WXWZN"
-    />
+    <!-- Google tag (gtag.js) — loaded once the browser is idle -->
     <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
+      (function () {
+        function loadGtag() {
+          var s = document.createElement("script");
+          s.async = true;
+          s.src = "https://www.googletagmanager.com/gtag/js?id=G-M6KN1WXWZN";
+          document.head.appendChild(s);
 
-      gtag("config", "G-M6KN1WXWZN");
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          window.gtag = gtag;
+          gtag("js", new Date());
+          gtag("config", "G-M6KN1WXWZN");
+        }
+
+        if (typeof window.requestIdleCallback === "function") {
+          window.requestIdleCallback(loadGtag, { timeout: 2000 });
+        } else {
+          window.addEventListener("load", function () {
+            setTimeout(loadGtag, 200);
+          });
+        }
+      })();
     </script>
 
     <!--

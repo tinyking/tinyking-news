@@ -1,0 +1,110 @@
+---
+import config from "@/config";
+
+type Props = {
+  /** AdSense ad unit ID (created in the AdSense dashboard). */
+  slot?: string;
+  format?: "auto" | "fluid" | "rectangle";
+  /** data-ad-layout, e.g. "in-article". */
+  layout?: string;
+  /** data-ad-layout-key (used by fluid layouts). */
+  adLayoutKey?: string;
+  /** Accessible label for the slot. */
+  label?: string;
+  class?: string;
+  /** Reserved height in px to prevent layout shift. */
+  minHeight?: number;
+};
+
+const {
+  slot,
+  format = "auto",
+  layout,
+  adLayoutKey,
+  label,
+  class: className,
+  minHeight = 120,
+} = Astro.props;
+
+const client = config.site.adsenseClient;
+const enabled = Boolean(config.features.ads?.enabled && client && slot);
+---
+
+{
+  enabled && (
+    <aside
+      class:list={["ad-slot not-prose", className]}
+      style={`min-height:${minHeight}px`}
+      data-ad-slot-root
+      data-ad-client={client}
+      data-ad-slot={slot}
+      data-ad-format={format}
+      data-ad-layout={layout}
+      data-ad-layout-key={adLayoutKey}
+      aria-label={label ?? "广告"}
+    />
+  )
+}
+
+<script>
+  type AdsWindow = Window & { adsbygoogle?: unknown[] };
+
+  function pushAd(): void {
+    const w = window as AdsWindow;
+    try {
+      w.adsbygoogle = w.adsbygoogle || [];
+      w.adsbygoogle.push({});
+    } catch {
+      // AdSense script blocked or unavailable — leave the reserved space empty.
+    }
+  }
+
+  // Insert the <ins> only when the slot scrolls near the viewport, then push.
+  // Inserting + pushing together keeps AdSense's queue in document order.
+  function buildAd(root: HTMLElement): void {
+    if (root.querySelector("ins.adsbygoogle")) return;
+
+    const ins = document.createElement("ins");
+    ins.className = "adsbygoogle";
+    ins.style.display = "block";
+    ins.setAttribute("data-ad-format", root.dataset.adFormat || "auto");
+    ins.setAttribute("data-full-width-responsive", "true");
+    if (root.dataset.adClient)
+      ins.setAttribute("data-ad-client", root.dataset.adClient);
+    if (root.dataset.adSlot)
+      ins.setAttribute("data-ad-slot", root.dataset.adSlot);
+    if (root.dataset.adLayout)
+      ins.setAttribute("data-ad-layout", root.dataset.adLayout);
+    if (root.dataset.adLayoutKey)
+      ins.setAttribute("data-ad-layout-key", root.dataset.adLayoutKey);
+
+    root.appendChild(ins);
+    pushAd();
+  }
+
+  function initAds(): void {
+    const roots = document.querySelectorAll<HTMLElement>(
+      "[data-ad-slot-root]:not([data-ad-observed])"
+    );
+
+    roots.forEach(root => {
+      root.setAttribute("data-ad-observed", "1");
+
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            observer.disconnect();
+            buildAd(root);
+          });
+        },
+        { rootMargin: "200px" }
+      );
+
+      observer.observe(root);
+    });
+  }
+
+  initAds();
+  document.addEventListener("astro:page-load", initAds);
+</script>

@@ -1,0 +1,56 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import config from "@/config";
+import Datetime from "@/components/Datetime.astro";
+
+type Props = {
+  current: CollectionEntry<"posts">;
+};
+
+const { current } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+
+const allPosts = getSortedPosts(await getCollection("posts"));
+const currentTags = new Set(current.data.tags);
+
+const related = allPosts
+  .filter(post => post.id !== current.id)
+  .map(post => {
+    const sameCategory = post.data.category === current.data.category;
+    const sharedTags = post.data.tags.filter(tag => currentTags.has(tag)).length;
+    const score = (sameCategory ? 10 : 0) + sharedTags;
+    return { post, score };
+  })
+  .filter(({ score }) => score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(({ post }) => post);
+---
+
+{
+  related.length > 0 && (
+    <section class="my-8" aria-label="相关阅读">
+      <h2 class="text-lg font-semibold">相关阅读</h2>
+      <ul class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {related.map(({ id, data, filePath }) => (
+          <li class="border-border hover:border-accent rounded-lg border p-4 transition-colors">
+            <a
+              href={getPostUrl(id, filePath, locale)}
+              class="text-accent decoration-dashed underline-offset-4 hover:underline"
+            >
+              <h3 class="line-clamp-2 text-base font-medium">{data.title}</h3>
+            </a>
+            <Datetime
+              class="mt-2"
+              pubDatetime={data.pubDatetime}
+              modDatetime={data.modDatetime}
+              timezone={data.timezone}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

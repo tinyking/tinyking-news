@@ -27,8 +27,18 @@ export default defineAstroPaperConfig({
       enabled: false,
     },
     search: "pagefind",
+    ads: {
+      enabled: true,
+      slots: {
+        // 在 AdSense 后台创建广告单元后，把槽位 ID 填到这里即可生效。
+        // 留空则不渲染任何广告。
+        inFeed: "",
+        inArticle: "",
+        homeBottom: "",
+      },
+    },
   },
-  socials: [],
+  socials: [{ name: "mail", url: "mailto:tinyking86@gmail.com" }],
   shareLinks: [
     { name: "whatsapp", url: "https://wa.me/?text=" },
     { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },

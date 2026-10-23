@@ -8,6 +8,7 @@ import Main from "@/components/Main.astro";
 import Card from "@/components/Card.astro";
 import Footer from "@/components/Footer.astro";
 import Pagination from "@/components/Pagination.astro";
+import AdSlot from "@/components/AdSlot.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -30,7 +31,21 @@ const t = useTranslations(locale);
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
     <ul>
-      {page.data.map(data => <Card {...data} />)}
+      {
+        page.data.map((data, index) => (
+          <>
+            <Card {...data} />
+            {index === 1 && (
+              <li class="border-border border-b py-5 last:border-b-0">
+                <AdSlot
+                  slot={config.features.ads?.slots?.inFeed}
+                  label="广告"
+                />
+              </li>
+            )}
+          </>
+        ))
+      }
     </ul>
   </Main>
 

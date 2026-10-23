@@ -1,7 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { getPostUrl } from "@/utils/getPostPaths";
 import { toTransitionName } from "@/utils/toTransitionName";
+import { CATEGORIES } from "@/categories";
+import config from "@/config";
 import Datetime from "./Datetime.astro";
 
 type Props = {
@@ -10,15 +13,20 @@ type Props = {
 
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
-const { title, description, ...props } = data;
+const { title, description, category, ...props } = data;
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const categoryEntry = category
+  ? CATEGORIES.find(c => c.slug === category)
+  : undefined;
 ---
 
-<li class="my-6">
+<li class="border-border group border-b py-5 last:border-b-0">
   <a
-    href={getPostUrl(id, filePath, Astro.currentLocale)}
+    href={getPostUrl(id, filePath, locale)}
     class:list={[
       "text-accent inline-block text-lg font-medium",
-      "decoration-dashed underline-offset-4 hover:underline",
+      "decoration-dashed underline-offset-4 group-hover:underline",
       "focus-visible:no-underline focus-visible:underline-offset-0",
     ]}
   >
@@ -26,6 +34,18 @@ const { title, description, ...props } = data;
       {title}
     </Heading>
   </a>
-  <Datetime {...props} />
-  <p>{description}</p>
+  <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+    <Datetime {...props} />
+    {
+      categoryEntry && (
+        <a
+          href={getRelativeLocaleUrl(locale, categoryEntry.slug)}
+          class="border-border text-muted-foreground hover:text-accent hover:border-accent rounded-md border px-2 py-0.5 text-xs transition-colors"
+        >
+          {categoryEntry.name}
+        </a>
+      )
+    }
+  </div>
+  <p class="mt-2 line-clamp-2">{description}</p>
 </li>

@@ -8,8 +8,6 @@ import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { unified } from "@astrojs/markdown-remark";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
 import {
   transformerNotationDiff,
@@ -37,10 +35,6 @@ export default defineConfig({
   },
   markdown: {
     processor: unified({
-      remarkPlugins: [
-        remarkToc,
-        [remarkCollapse, { test: "Table of contents" }],
-      ],
       rehypePlugins: [rehypeCallouts],
     }),
     shikiConfig: {
@@ -72,8 +66,13 @@ export default defineConfig({
       name: "Noto Sans SC",
       cssVariable: "--font-noto-sans-sc",
       provider: fontProviders.google(),
-      fallbacks: ["sans-serif"],
-      weights: [400, 700],
+      fallbacks: [
+        "PingFang SC",
+        "Hiragino Sans GB",
+        "Microsoft YaHei",
+        "sans-serif",
+      ],
+      weights: [400, 500, 700],
       styles: ["normal"],
       formats: ["woff", "ttf"],
     },

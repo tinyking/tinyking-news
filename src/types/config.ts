@@ -61,6 +61,21 @@ interface FeaturesConfig {
    * Set to false to disable search entirely.
    */
   search?: "pagefind" | false;
+  /**
+   * Google AdSense ad units. Ads only render when `enabled` is true and the
+   * relevant slot ID below is set. Slot IDs are created in the AdSense dashboard.
+   */
+  ads?: {
+    enabled: boolean;
+    slots?: {
+      /** In-feed ad on listing pages (home / posts / categories / tags / archives). */
+      inFeed?: string;
+      /** Ad inserted after the article content on post detail pages. */
+      inArticle?: string;
+      /** Ad at the bottom of the home page. */
+      homeBottom?: string;
+    };
+  };
 }
 
 interface SocialLink {
