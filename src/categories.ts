@@ -16,6 +16,11 @@ export const CATEGORIES: Category[] = [
     desc: "AI 工具的实际用法、使用心得与趋势观察",
   },
   {
+    slug: "dev",
+    name: "技术",
+    desc: "编程实践、工具链与工程问题复盘",
+  },
+  {
     slug: "work",
     name: "职场",
     desc: "沟通、协作、管理与职业路径上的经验和教训",
