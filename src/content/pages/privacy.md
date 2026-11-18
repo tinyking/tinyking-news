@@ -1,9 +1,9 @@
 ---
 title: "隐私政策"
-description: "阅微漫记的隐私政策：说明本站如何使用 Cookie、Google Analytics 与 Google AdSense。"
+description: "语霖｜人生Debug 的隐私政策：说明本站如何使用 Cookie、Google Analytics 与 Google AdSense。"
 ---
 
-本站（阅微漫记）尊重并保护访问者的隐私。本页说明本站会收集哪些信息，以及如何使用这些信息。
+本站（语霖｜人生Debug）尊重并保护访问者的隐私。本页说明本站会收集哪些信息，以及如何使用这些信息。
 
 ## 我们收集的信息
 

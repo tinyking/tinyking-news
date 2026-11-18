@@ -3,10 +3,10 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://www.wangjianchao.cn/",
-    title: "阅微漫记",
+    title: "语霖｜人生Debug",
     description:
-      "关于人生成长、AI 应用、职场经验与独立思考的原创随笔。于细微处读世事，在变化中保持清醒。",
-    author: "wangjianchao",
+      "40岁程序员 / 技术管理。用代码思维 Debug 人生：技术债、单点故障、灰度发布。公众号「爱语霖爱生活」｜执笔为语，心落成霖",
+    author: "语霖",
     profile: "https://www.wangjianchao.cn/",
     lang: "zh",
     timezone: "Asia/Shanghai",
