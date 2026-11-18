@@ -62,18 +62,19 @@ interface FeaturesConfig {
    */
   search?: "pagefind" | false;
   /**
-   * Google AdSense ad units. Ads only render when `enabled` is true and the
-   * relevant slot ID below is set. Slot IDs are created in the AdSense dashboard.
+   * Google AdSense. Ads render only at the end of an article, and only when
+   * `enabled` is true and `slots.inArticle` is set to an ad unit ID created in
+   * the AdSense dashboard.
+   *
+   * Make sure AdSense "Auto ads（自动广告）" is turned OFF for this site in the
+   * dashboard — otherwise Google injects ads across every page that loads the
+   * AdSense script.
    */
   ads?: {
     enabled: boolean;
     slots?: {
-      /** In-feed ad on listing pages (home / posts / categories / tags / archives). */
-      inFeed?: string;
-      /** Ad inserted after the article content on post detail pages. */
+      /** Ad unit inserted after the article content on post detail pages. */
       inArticle?: string;
-      /** Ad at the bottom of the home page. */
-      homeBottom?: string;
     };
   };
 }

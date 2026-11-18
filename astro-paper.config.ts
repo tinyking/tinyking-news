@@ -30,11 +30,11 @@ export default defineAstroPaperConfig({
     ads: {
       enabled: true,
       slots: {
-        // 在 AdSense 后台创建广告单元后，把槽位 ID 填到这里即可生效。
-        // 留空则不渲染任何广告。
-        inFeed: "",
-        inArticle: "",
-        homeBottom: "",
+        // 广告只出现在文章末尾。在 AdSense 后台创建一个「展示广告/信息流广告」单元，
+        // 把它的槽位 ID（data-ad-slot，纯数字）填到下面即可生效；留空则不渲染任何广告。
+        // 同时请在 AdSense 后台关闭该站点的「自动广告（Auto ads）」，否则 Google 会在
+        // 每个加载了 AdSense 脚本的页面自动插入广告。
+        inArticle: "5865445358",
       },
     },
   },

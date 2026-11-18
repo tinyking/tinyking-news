@@ -6,7 +6,6 @@ import Main from "@/components/Main.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Card from "@/components/Card.astro";
 import Footer from "@/components/Footer.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { CATEGORIES } from "@/categories";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import config from "@/config";
@@ -45,21 +44,7 @@ const { category, posts } = Astro.props;
 
   <Main pageTitle={category.name} pageDesc={category.desc}>
     <ul>
-      {
-        posts.map((data, index) => (
-          <>
-            <Card {...data} />
-            {index === 1 && (
-              <li class="border-border border-b py-5 last:border-b-0">
-                <AdSlot
-                  slot={config.features.ads?.slots?.inFeed}
-                  label="广告"
-                />
-              </li>
-            )}
-          </>
-        ))
-      }
+      {posts.map(data => <Card {...data} />)}
     </ul>
   </Main>
 

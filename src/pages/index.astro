@@ -9,7 +9,6 @@ import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
-import AdSlot from "@/components/AdSlot.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import { CATEGORIES } from "@/categories";
@@ -139,12 +138,6 @@ const homePath = getRelativeLocaleUrl(locale, "");
         </section>
       )
     }
-
-    <AdSlot
-      slot={config.features.ads?.slots?.homeBottom}
-      class="mt-8"
-      label="广告"
-    />
 
     <div class="my-8 text-center">
       <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>

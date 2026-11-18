@@ -12,6 +12,12 @@ type Props = {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  /**
+   * Load the AdSense loader script. Only set this on pages that actually render
+   * an ad unit, so no other page can be turned into ad inventory by AdSense's
+   * account-level Auto ads (自动广告).
+   */
+  ads?: boolean;
 };
 
 const { site } = config;
@@ -21,6 +27,7 @@ const {
   description = site.description,
   ogImage = resolveDefaultOgImagePath(config),
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  ads = false,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
@@ -95,9 +102,9 @@ const rssHref = getRelativeLocaleUrl(
       )
     }
 
-    <!-- Google AdSense -->
+    <!-- Google AdSense — only on pages that render a manual ad unit -->
     {
-      site.adsenseClient && (
+      ads && site.adsenseClient && (
         <script
           is:inline
           async

@@ -16,6 +16,12 @@ const { site } = config;
 const { title, description, ogImage, canonicalURL, pubDatetime, modDatetime } =
   Astro.props;
 
+// Ads live at the end of the article, so the AdSense loader only ships with
+// post detail pages — and only when the in-article slot is actually configured.
+const loadAds = Boolean(
+  config.features.ads?.enabled && config.features.ads?.slots?.inArticle
+);
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -33,7 +39,7 @@ const structuredData = {
 };
 ---
 
-<Layout {title} {description} {ogImage} {canonicalURL}>
+<Layout {title} {description} {ogImage} {canonicalURL} ads={loadAds}>
   <Fragment slot="head">
     <!-- Override og:type for article pages -->
     <meta property="og:type" content="article" />
