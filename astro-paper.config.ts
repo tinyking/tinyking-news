@@ -38,7 +38,10 @@ export default defineAstroPaperConfig({
       },
     },
   },
-  socials: [{ name: "mail", url: "mailto:tinyking86@gmail.com" }],
+  socials: [
+    { name: "x", url: "https://x.com/tinyking86" },
+    { name: "mail", url: "mailto:tinyking86@gmail.com" },
+  ],
   shareLinks: [
     { name: "whatsapp", url: "https://wa.me/?text=" },
     { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
