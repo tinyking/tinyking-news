@@ -36,6 +36,12 @@ export default defineAstroPaperConfig({
         // 每个加载了 AdSense 脚本的页面自动插入广告。
         inArticle: "5865445358",
       },
+      // Adsterra 横幅：src 为后台给的 loader 脚本地址，containerId 为它要填充的 div id。
+      // 渲染在文章末尾，同样只在文章页加载。
+      banner: {
+        src: "https://bicea.org/21/117598a0d78b14117f84804c1d91b763",
+        containerId: "container-117598a0d78b14117f84804c1d91b763",
+      },
     },
   },
   socials: [

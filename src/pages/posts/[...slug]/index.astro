@@ -18,6 +18,7 @@ import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
 import TableOfContents from "./_components/TableOfContents.astro";
 import RelatedPosts from "./_components/RelatedPosts.astro";
 import AdSlot from "@/components/AdSlot.astro";
+import AdsterraBanner from "@/components/AdsterraBanner.astro";
 import { CATEGORIES } from "@/categories";
 import config from "@/config";
 
@@ -172,6 +173,8 @@ const ogImage = ogImageUrl
       class="mt-8"
       label="广告"
     />
+
+    <AdsterraBanner />
 
     <hr class="my-8 border-dashed" />
 

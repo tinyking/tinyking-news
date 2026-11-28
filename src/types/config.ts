@@ -76,6 +76,15 @@ interface FeaturesConfig {
       /** Ad unit inserted after the article content on post detail pages. */
       inArticle?: string;
     };
+    /**
+     * Adsterra banner. `src` is the loader script URL from the Adsterra
+     * dashboard, `containerId` is the id of the div it fills. Rendered at the
+     * end of articles. Leave undefined to hide the banner.
+     */
+    banner?: {
+      src: string;
+      containerId: string;
+    };
   };
 }
 

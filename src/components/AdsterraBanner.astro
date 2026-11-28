@@ -1,0 +1,49 @@
+---
+import config from "@/config";
+
+const ads = config.features.ads;
+const banner = ads?.enabled ? ads.banner : undefined;
+---
+
+{
+  banner && (
+    <aside
+      class="ad-slot not-prose mt-6"
+      aria-label="广告"
+      data-adsterra-root
+      data-adsterra-src={banner.src}
+    >
+      <div id={banner.containerId} />
+    </aside>
+  )
+}
+
+<script>
+  // Adsterra 的 loader 只在执行时扫描一次容器，因此每次页面切换后都要重新注入，
+  // 否则 View Transitions 导航到下一篇时广告位会是空白。
+  function initAdsterra(): void {
+    const roots = document.querySelectorAll<HTMLElement>(
+      "[data-adsterra-root]:not([data-adsterra-ready])"
+    );
+
+    roots.forEach(root => {
+      const src = root.dataset.adsterraSrc;
+      if (!src) return;
+      root.setAttribute("data-adsterra-ready", "1");
+
+      const selector = `script[data-adsterra-loader="${src}"]`;
+      document.querySelector<HTMLScriptElement>(selector)?.remove();
+
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.setAttribute("fetchpriority", "high");
+      script.setAttribute("data-cfasync", "false");
+      script.dataset.adsterraLoader = src;
+      document.body.appendChild(script);
+    });
+  }
+
+  initAdsterra();
+  document.addEventListener("astro:page-load", initAdsterra);
+</script>
